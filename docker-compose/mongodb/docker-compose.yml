@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  db:
+    image: mongo:latest
+    container_name: dev-mongodb
+    hostname: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dev
+      MONGO_INITDB_ROOT_PASSWORD: dev
+    ports:
+      - "27017:27017"
