@@ -2,7 +2,7 @@ package br.com.ajuda
 
 import com.mongodb.spark.config.ReadConfig
 import org.apache.spark.SparkContext
-import org.apache.spark.sql.types.{LongType, StringType, StructField, StructType}
+import org.apache.spark.sql.types.{IntegerType, LongType, StringType, StructField, StructType}
 import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.bson.Document
 
@@ -48,7 +48,7 @@ case object IngestaoDadosMongoDB extends App {
     val df = List(
       (12, "nome teste 12"),
       (13, "nome teste 13")
-    ).toDF("id", "nome")
+    ).toDF("_id", "nome")
 
     df.show(10, false)
 
@@ -73,14 +73,12 @@ case object IngestaoDadosMongoDB extends App {
     val aggregateRDD = mongoRDD.withPipeline(aggregatePipeline)
 
     val schema = StructType(Seq(
-      StructField("_id", StructType(Seq(
-        StructField("oid", StringType)
-      ))),
-      StructField("id", LongType),
+      StructField("_id", IntegerType),
       StructField("nome", StringType)
     ))
 
     val aggregateDF = aggregateRDD.toDF(schema)
+    aggregateDF.printSchema()
 
     aggregateDF.show(10, false)
   }
